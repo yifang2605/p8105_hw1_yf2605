@@ -1,0 +1,73 @@
+---
+title: "p8105_hw1_yf2605"
+author: "Yi_Fang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Libraries
+
+```{r}
+library(tidyverse)
+```
+
+# Problem 1
+
+## load the penguins data set:
+
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+
+## Description:
+Summary of the data set:
+```{r} 
+summary(penguins)
+```
+
+*  There are `r ncol(penguins)` variables and `r nrow(penguins)` records in the penguins data set.
+*  The variables include: `r colnames(penguins)` 
+*  According to the dataset, the mean flipper length is `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), digits = 2)` mm. 
+
+## Scatter plot for flipper length vs bill length:
+```{r}
+ggplot(penguins, 
+  aes(x = bill_length_mm, 
+      y = flipper_length_mm, 
+      color = species)) + geom_point()
+
+ggsave("scatter_plot.png", height = 4, width = 6)
+```
+
+# Problem 2
+
+## create the data frame
+
+```{r}
+df = tibble(random_num = rnorm(10),
+            logical_vec = (random_num > 0),
+            char_vec = c('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
+            factor_vec = factor(c("l", "m", "s", "s", "s", "l", "l", "m", "m", "l")))
+df
+```
+
+## take mean
+
+```{r}
+mean(pull(df, random_num))
+mean(pull(df, logical_vec))
+mean(pull(df, char_vec))
+mean(pull(df, factor_vec))
+```
+`mean()` works for numeric and logical variables but doesn’t work for character and factor variables. 
+
+## `as.numeric` fuction
+```{r eval=FALSE}
+as.numeric(pull(df, logical_vec))
+as.numeric(pull(df, char_vec))
+as.numeric(pull(df, factor_vec))
+```
+*  The logical variable is converted to 0 and 1
+*  The character variable is converted to NA by coercion
+*  factor variable is converted to 1,2 and 3\
+This explains the mean of the logical variable.
